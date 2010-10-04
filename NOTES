@@ -1,0 +1,6 @@
+The test sets have the following format:
+n
+l_1 d_1
+l_2 d_2
+
+where n is the number of tests in the set, l_x is the length of job x (>= 1)and d_x is the due date of job x (this can be negative).
