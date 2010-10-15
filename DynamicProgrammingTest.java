@@ -1,3 +1,4 @@
+
 import java.io.*;
 import java.util.Collections;
 import java.util.Scanner;
@@ -66,10 +67,8 @@ public class DynamicProgrammingTest extends TestCase{
 		assertEquals(DP.maxProcessingTimeIndex	(1,5,5),	-1);
 		assertEquals(DP.maxProcessingTimeIndex	(1,5,4), 	 3);
 		assertEquals(DP.maxProcessingTimeIndex	(1,5,14),	 4);
-		assertEquals(DP.maxProcessingTimeIndex	(-1,1,1),	-1);
-		assertEquals(DP.sum						(-1,1,1),	 0);
-		assertEquals(DP.sum						(0,3,3),   193);
-		assertEquals(DP.sum						(1,1,1),   	 0);
-		assertEquals(DP.sum						(1,1,2),     0);
+		assertEquals(DP.sumProcessingTimes		(0,3,3),   193);
+		assertEquals(DP.sumProcessingTimes		(1,1,1),   	 -1);
+		assertEquals(DP.sumProcessingTimes		(1,1,2),     -1);
 	}
 }
