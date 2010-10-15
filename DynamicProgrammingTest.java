@@ -1,5 +1,3 @@
-package programming1;
-
 import java.io.*;
 import java.util.Collections;
 import java.util.Scanner;

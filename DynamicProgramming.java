@@ -1,9 +1,7 @@
-package programming1;
-
 public class DynamicProgramming {
 	
-	private JobList 	jobs;
-	private int[][][][]	Tardiness;
+	private JobList 			jobs;
+	private int[][][][]			Tardiness;
 	/**
 	 * The constructor assumes it receives jobs in non-decreasing deadline order
 	 * @param j The list of jobs in non-decreasing deadline order
@@ -25,10 +23,6 @@ public class DynamicProgramming {
 	
 	private int tardiness(int i, int j, int k, int t)
 	{
-		/*
-		 * TODO: This method still needs to be implemented to work correctly and faster
-		 * The other helper methods are hopefully ok and useful
-		 */
 		if( i > j ) //Empty set
 			return 0;
 		if(Tardiness[i][j][k][t] != 0)	//already computed
@@ -37,12 +31,10 @@ public class DynamicProgramming {
 		for(int delta = 0; delta < jobs.size() - k; delta++)
 		{
 			int kPrime = maxProcessingTimeIndex(i,j,k);
-			if (kPrime == -1)//S(i,j,k) is empty
-				return 0;
-			if(sum(i,k+delta,kPrime) == -1)// empty set
-				return 0;
-			Tardiness[i][j][k][t] = tardiness(i,k+delta,kPrime,t) + Math.max(0,t + sum(i,k+delta,kPrime) - jobs.get(kPrime).getDue()) +
-			   						tardiness(kPrime + delta + 1, j, kPrime, sum(i,k+delta,kPrime));
+			if (kPrime == -1)//S(i,j,k) = {i} = {j}
+				return Math.max(0, t + jobs.get(i).getLength() - jobs.get(i).getDue());
+			Tardiness[i][j][k][t] = tardiness(i,k+delta,kPrime,t) + Math.max(0,t + sumProcessingTimes(i,k+delta,kPrime) - jobs.get(kPrime).getDue()) +
+			   						tardiness(kPrime + delta + 1, j, kPrime, sumProcessingTimes(i,k+delta,kPrime));
 			if(Tardiness[i][j][k][t] < minTardiness)
 				minTardiness = Tardiness[i][j][k][t];
 		}
@@ -58,40 +50,37 @@ public class DynamicProgramming {
 			return -1;
 		if(jobs.size() == 0 )
 			return -1;
-		
 		Job maximumJob = jobs.get(0); 
-		
 		for (Job j : this.jobs) {
 			if(j.compareProcessingTimeTo(maximumJob) > 0)
 				maximumJob = j;
 		}
-		
 		return maximumJob.getLength();
 	}
 	
 	/**
-	 * @return The sum of processing times of all jobs within S(i,j,k), or 0 if the set is empty
+	 * @return The sum of processing times of all jobs within S(i,j,k), or -1 if the set is empty
+	 * Assumes i, j and k are valid
 	 * */
-	public int sum(int i,int j,int k)
+	public int sumProcessingTimes(int i,int j,int k)
 	{
 		if(jobs == null)
 			return 0;
 		if(jobs.size() == 0 )
 			return 0;
-
-		int sum = 0;
-		
-		try	{
-			Job jobK = jobs.get(k);
-			for (Job job : this.jobs.subList(i, j+1)) {
-				if(job.compareProcessingTimeTo(jobK) < 0)
-					sum += job.getLength();
+		int 	sum = 0;
+		boolean emptySet = true;
+		Job jobK = jobs.get(k);
+		for(int index = i; index <= j; index++)
+			if(jobs.get(index).compareProcessingTimeTo(jobK) < 0)
+			{
+				sum 	+= jobs.get(index).getLength();
+				emptySet = false;
 			}
-		}catch(Exception ex)
-		{
-			sum = 0;
-		}
-		return sum;
+		if(emptySet)
+			return -1;
+		else
+			return sum;
 	}
 	
 	/**
@@ -103,7 +92,6 @@ public class DynamicProgramming {
 			return -1;
 		if(jobs.size() == 0 )
 			return -1;
-
 		Job maximumJob 	= jobs.get(0);
 		int index 		= 0;
 		int maxIndex 	= 0; 
@@ -127,24 +115,25 @@ public class DynamicProgramming {
 	{
 		if(jobs == null || i > j)
 			return -1;
-
-		int maxIndex	= -1;
-		try{
-			Job jobK 		= jobs.get(k);
-			Job maximumJob	= new Job(-1,-1);
-			int index		= i;
-			for (Job job : this.jobs.subList(i, j+1)) {
-				if((job.compareProcessingTimeTo(maximumJob)) > 0 && (job.compareProcessingTimeTo(jobK) < 0))
+		int 	maxIndex	= i;
+		boolean emptySet	= true;
+		Job jobK 		= jobs.get(k);
+		Job maximumJob	= jobs.get(i);
+		for (int index = i; index <= j; index++) {
+			if( jobs.get(index).compareProcessingTimeTo(jobK) < 0 )
+			{
+				emptySet = false;
+				if(jobs.get(index).compareProcessingTimeTo(maximumJob) > 0)
 				{
-					maximumJob 	= job;
+					maximumJob 	= jobs.get(index);
 					maxIndex 	= index;
 				}
-				index++;
+			
 			}
-		}catch(Exception e)
-		{
-			maxIndex = -1;
 		}
-		return maxIndex;
+		if(emptySet)
+			return -1;
+		else
+			return maxIndex;
 	}
 }
