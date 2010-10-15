@@ -118,7 +118,7 @@ public class DynamicProgramming {
 		int 	maxIndex	= i;
 		boolean emptySet	= true;
 		Job jobK 		= jobs.get(k);
-		Job maximumJob	= jobs.get(i);
+		Job maximumJob	= new Job(-1,-1);
 		for (int index = i; index <= j; index++) {
 			if( jobs.get(index).compareProcessingTimeTo(jobK) < 0 )
 			{
