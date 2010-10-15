@@ -7,7 +7,7 @@ public class Schedule {
 	private Job job; // job is the job that was scheduled in this node (if any)
 	
 	// we memoize tardiness, for some reason that's probably useful.
-	public int tardiness;
+	private int tardiness;
 	
 	/**
 	 * Initialize an empty schedule.
@@ -27,7 +27,7 @@ public class Schedule {
 		this.previous = previous;
 		this.job = job;
 		// TODO we assume that job will not be null in the assignment of tardiness, not good
-		this.tardiness = Math.max(0, getTotalTime() + job.getDue());
+		this.tardiness = Math.max(0, getTotalTime() - job.getDue());
 		
 		if(previous != null)
 			tardiness += previous.tardiness;
@@ -51,6 +51,7 @@ public class Schedule {
 	public int getTotalTime() {
 		if(previous != null)
 			return previous.getTotalTime() + job.getLength();
+		if (job == null) return 0; // TODO this is a lil weird. must be a better way
 		return job.getLength();
 	}
 	
@@ -60,5 +61,14 @@ public class Schedule {
 	
 	public boolean contains(Job job) {
 		return (this.job == job) || (previous != null && previous.contains(job));
+	}
+	
+	@Override
+	public String toString() {
+		if (previous == null) {
+			if (job == null) return "foo"; // TODO don't like this at all. there's a bigger problem going on here.
+			return job.toString();
+		}
+		return previous.toString() + "->" + job.toString();  
 	}
 }
