@@ -26,4 +26,22 @@ public class Job {
 	{
 		return "{ len: " + getLength() + ", due: " + getDue() + "}";
 	}
+	
+	/**
+	 * Compares the processing time of this job to the one of job <tt>j</tt> and returns -1/0/1 if this job's time is smaller/equal/larger.
+	 * @param j the job which this job will be compared to
+	 * @return -1/0/1 if, respectively, this job's processing time is smaller/equal to/larger than j's.
+	 */
+	public int compareProcessingTimeTo(Job j)
+	{
+		if (this.getLength() < j.getLength()) {
+			return -1;
+		}
+		else if (this.getLength() == j.getLength()) {
+			return 0;
+		}
+		else {
+			return 1;
+		}
+	}
 }

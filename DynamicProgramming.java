@@ -58,12 +58,14 @@ public class DynamicProgramming {
 			return -1;
 		if(jobs.size() == 0 )
 			return -1;
-		JobList.MaxProcessingTimeComparator comparator = new JobList.MaxProcessingTimeComparator();
+		
 		Job maximumJob = jobs.get(0); 
+		
 		for (Job j : this.jobs) {
-			if(comparator.compare(j, maximumJob) > 0)
+			if(j.compareProcessingTimeTo(maximumJob) > 0)
 				maximumJob = j;
 		}
+		
 		return maximumJob.getLength();
 	}
 	
@@ -76,12 +78,13 @@ public class DynamicProgramming {
 			return 0;
 		if(jobs.size() == 0 )
 			return 0;
-		JobList.MaxProcessingTimeComparator comparator = new JobList.MaxProcessingTimeComparator();
+
 		int sum = 0;
+		
 		try	{
 			Job jobK = jobs.get(k);
 			for (Job job : this.jobs.subList(i, j+1)) {
-				if(comparator.compare(job, jobK) < 0)
+				if(job.compareProcessingTimeTo(jobK) < 0)
 					sum += job.getLength();
 			}
 		}catch(Exception ex)
@@ -100,12 +103,12 @@ public class DynamicProgramming {
 			return -1;
 		if(jobs.size() == 0 )
 			return -1;
-		JobList.MaxProcessingTimeComparator comparator = new JobList.MaxProcessingTimeComparator();
+
 		Job maximumJob 	= jobs.get(0);
 		int index 		= 0;
 		int maxIndex 	= 0; 
 		for (Job j : this.jobs) {
-			if(comparator.compare(j, maximumJob) > 0)
+			if(j.compareProcessingTimeTo(maximumJob) > 0)
 			{
 				maximumJob 	= j;
 				maxIndex 	= index;
@@ -124,14 +127,14 @@ public class DynamicProgramming {
 	{
 		if(jobs == null || i > j)
 			return -1;
-		JobList.MaxProcessingTimeComparator comparator = new JobList.MaxProcessingTimeComparator();
+
 		int maxIndex	= -1;
 		try{
 			Job jobK 		= jobs.get(k);
 			Job maximumJob	= new Job(-1,-1);
 			int index		= i;
 			for (Job job : this.jobs.subList(i, j+1)) {
-				if((comparator.compare(job, maximumJob)) > 0 && (comparator.compare(job, jobK) < 0))
+				if((job.compareProcessingTimeTo(maximumJob)) > 0 && (job.compareProcessingTimeTo(jobK) < 0))
 				{
 					maximumJob 	= job;
 					maxIndex 	= index;
