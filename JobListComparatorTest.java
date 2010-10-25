@@ -1,6 +1,7 @@
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
-import junit.framework.Assert;
 import junit.framework.TestCase;
 
 import org.junit.After;
@@ -8,11 +9,11 @@ import org.junit.Before;
 
 public class JobListComparatorTest extends TestCase {
 
-	JobList l;
+	List<Job> l;
 	
 	@Before
 	public void setUp() {
-		l = new JobList();
+		l = new ArrayList<Job>();
 		
 		l.add(new Job(10, 10));
 		l.add(new Job(20, 20));
@@ -30,7 +31,7 @@ public class JobListComparatorTest extends TestCase {
 	}
 	
 	public void testComparator() {
-		Collections.sort(l, new JobList.NonDecreasingDeadlineOrderComparator());
+		Collections.sort(l, new NonDecreasingDeadlineOrderComparator());
 		
 		int prevDeadline = -1;
 		for (Job j : l) {

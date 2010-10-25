@@ -1,74 +1,61 @@
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * This is a very similar class to the one in algorithms.java, just extracted from there and having small changes.
- */
-public class Schedule {
-	private Schedule previous;
-	private Job job; // job is the job that was scheduled in this node (if any)
-	
-	// we memoize tardiness, for some reason that's probably useful.
+public class Schedule implements Comparable<Schedule> {
+	private List<Job> jobs;
+	// memoize tardiness and totalTime
 	private int tardiness;
-	
-	/**
-	 * Initialize an empty schedule.
-	 */
+	private int totalTime;
+
 	public Schedule() {
-		job = null;
-		previous = null;
+		jobs = new ArrayList<Job>();
 		tardiness = 0;
+		totalTime = 0;
 	}
-	
-	/**
-	 * Add a job to the schedule.
-	 * @param previous the schedule which will be the previous schedule in this new schedule TODO fix this description :(
-	 * @param job The job that will be added to the schedule.
-	 */
-	public Schedule(Schedule previous, Job job) {
-		this.previous = previous;
-		this.job = job;
-		// TODO we assume that job will not be null in the assignment of tardiness, not good
-		this.tardiness = Math.max(0, getTotalTime() - job.getDue());
+
+	public Schedule add(Job job) {
+		if (job == null) return this;
 		
-		if(previous != null)
-			tardiness += previous.tardiness;
-	}
-	
-	// used by the best-first search
-	// currently, schedules are traversed in smallest total tardiness order
-	public int compareTo(Object o) {
-		return (getTardiness()) - (((Schedule)o).getTardiness());
+		jobs.add(job);
+		totalTime += job.getLength();
+		tardiness += Math.max(0, getTotalTime() - job.getDue());
 		
-		// replace with the following to get a depth-first search
-		// return get_depth() - ((schedule)o).get_depth();
+		return this;
 	}
-	
+
+	public boolean contains(Job job) {
+		return jobs.contains(job);
+	}
+
+	// TODO why do is this named getDepth? Hm.
 	public int getDepth() {
-		if(previous != null)
-			return previous.getDepth() + 1;
-		return 1;
+		return jobs.size();
 	}
-	
-	public int getTotalTime() {
-		if(previous != null)
-			return previous.getTotalTime() + job.getLength();
-		if (job == null) return 0; // TODO this is a lil weird. must be a better way
-		return job.getLength();
-	}
-	
+
 	public int getTardiness() {
 		return tardiness;
 	}
-	
-	public boolean contains(Job job) {
-		return (this.job == job) || (previous != null && previous.contains(job));
+
+	public int getTotalTime() {
+		return totalTime;
 	}
 	
+	public List<Job> getJobs() {
+		return jobs;
+	}
+
 	@Override
-	public String toString() {
-		if (previous == null) {
-			if (job == null) return "foo"; // TODO don't like this at all. there's a bigger problem going on here.
-			return job.toString();
-		}
-		return previous.toString() + "->" + job.toString();  
+	public int compareTo(Schedule schedule) {
+		return getTardiness() - schedule.getTardiness();
 	}
+
+	public Schedule add(Schedule schedule) {
+		if (this == schedule) return this;
+		
+		for (Job j : schedule.getJobs())
+			this.add(j);
+		
+		return this;
+	}
+
 }
