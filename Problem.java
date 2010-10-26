@@ -24,3 +24,4 @@ public class Problem {
 	// TODO add hashcode.
 	
 }
+

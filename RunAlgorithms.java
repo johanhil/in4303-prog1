@@ -21,6 +21,7 @@ public class RunAlgorithms {
 		
 		algorithms.add(new Greedy());
 		algorithms.add(new DynamicProgramming());
+		algorithms.add(new FPTAS(0.5));
 		//algorithms.add(new BestFirstSearch());
 
 		RunAlgorithms runner = new RunAlgorithms(input);

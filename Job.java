@@ -1,9 +1,9 @@
 
 public class Job {
 	private int length;
-	private int due;
+	private double due;
 	
-	public Job (int length, int due) {
+	public Job (int length, double due) {
 		this.length = length;
 		this.due = due;
 	}
@@ -11,7 +11,7 @@ public class Job {
 	public int getLength() {
 		return length;
 	}
-	public int getDue() {
+	public double getDue() {
 		return due;
 	}
 	

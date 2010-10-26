@@ -4,12 +4,12 @@ import java.util.List;
 public class Schedule implements Comparable<Schedule> {
 	private List<Job> jobs;
 	// memoize tardiness and totalTime
-	private int tardiness;
+	private double tardiness;
 	private int totalTime;
 
 	public Schedule() {
 		jobs = new ArrayList<Job>();
-		tardiness = 0;
+		tardiness = 0.0;
 		totalTime = 0;
 	}
 
@@ -32,7 +32,7 @@ public class Schedule implements Comparable<Schedule> {
 		return jobs.size();
 	}
 
-	public int getTardiness() {
+	public double getTardiness() {
 		return tardiness;
 	}
 
@@ -46,7 +46,8 @@ public class Schedule implements Comparable<Schedule> {
 
 	@Override
 	public int compareTo(Schedule schedule) {
-		return getTardiness() - schedule.getTardiness();
+		return getTardiness() > schedule.getTardiness()?1:
+				((getTardiness() == schedule.getTardiness())?0:-1);
 	}
 
 	public Schedule add(Schedule schedule) {

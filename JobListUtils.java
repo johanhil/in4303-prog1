@@ -39,6 +39,5 @@ public class JobListUtils {
 		
 		return totalTime;
 	}
-	
-	
 }
+
